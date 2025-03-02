@@ -268,7 +268,7 @@ packages:
       path: "flutter_kit/firebase_packages"
       relative: true
     source: path
-    version: "1.0.2"
+    version: "1.0.3"
   fixnum:
     dependency: transitive
     description:

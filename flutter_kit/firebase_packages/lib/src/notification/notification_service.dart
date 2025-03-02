@@ -69,6 +69,12 @@ abstract class NotificationService {
     );
 
     // FirebaseMessaging.onMessage.listen(_onForegroundMessage);
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: false,
+      sound: false,
+    );
+
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   }
 
