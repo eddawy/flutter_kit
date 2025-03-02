@@ -68,7 +68,7 @@ abstract class NotificationService {
       // },
     );
 
-    FirebaseMessaging.onMessage.listen(_onForegroundMessage);
+    // FirebaseMessaging.onMessage.listen(_onForegroundMessage);
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   }
 
@@ -85,29 +85,29 @@ abstract class NotificationService {
             await _base64encodedImage(imageUrl));
       }
 
-      final sound = android.sound;
-      final channelId = android.channelId;
+      // final sound = android.sound;
+      // final channelId = android.channelId;
 
-      _localNotifications.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channelId ?? _androidNotificationChannel.id,
-            channelId ?? _androidNotificationChannel.name,
-            icon: 'ic_notification',
-            styleInformation: androidBitmap != null
-                ? BigPictureStyleInformation(androidBitmap,
-                    hideExpandedLargeIcon: true)
-                : null,
-            sound: sound != null && sound != 'default'
-                ? RawResourceAndroidNotificationSound(sound.split(".")[0])
-                : null,
-          ),
-        ),
-        payload: jsonEncode(message.data),
-      );
+      // _localNotifications.show(
+      //   notification.hashCode,
+      //   notification.title,
+      //   notification.body,
+      //   NotificationDetails(
+      //     android: AndroidNotificationDetails(
+      //       channelId ?? _androidNotificationChannel.id,
+      //       channelId ?? _androidNotificationChannel.name,
+      //       icon: 'ic_notification',
+      //       styleInformation: androidBitmap != null
+      //           ? BigPictureStyleInformation(androidBitmap,
+      //               hideExpandedLargeIcon: true)
+      //           : null,
+      //       sound: sound != null && sound != 'default'
+      //           ? RawResourceAndroidNotificationSound(sound.split(".")[0])
+      //           : null,
+      //     ),
+      //   ),
+      //   payload: jsonEncode(message.data),
+      // );
     }
 
     if (message.notification != null) {
