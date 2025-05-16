@@ -17,13 +17,15 @@ class XState<T> with _$XState<T> {
 
   const factory XState.error(ErrorModel error) = _error;
 
-  const factory XState.dataAndError(T data, ErrorModel error) = _dataAndError<T>;
+  const factory XState.dataAndError(T data, ErrorModel error) =
+      _dataAndError<T>;
 
   bool get isLoading => maybeWhen(loading: () => true, orElse: () => false);
 
   bool get isError => maybeWhen(error: (_) => true, orElse: () => false);
 
-  bool get isDataAndError => maybeWhen(dataAndError: (_, __) => true, orElse: () => false);
+  bool get isDataAndError =>
+      maybeWhen(dataAndError: (_, __) => true, orElse: () => false);
 
   bool get isInitial => maybeWhen(initial: (_) => true, orElse: () => false);
 
@@ -41,7 +43,10 @@ class XState<T> with _$XState<T> {
   }
 
   void ifHasError(void Function(ErrorModel error) function) {
-    final error = maybeWhen(error: (error) => error, dataAndError: (data, error) => error, orElse: () => null);
+    final error = maybeWhen(
+        error: (error) => error,
+        dataAndError: (data, error) => error,
+        orElse: () => null);
     if (error != null) function(error);
   }
 
@@ -52,8 +57,7 @@ class XState<T> with _$XState<T> {
 
 @Deprecated('Use "FormStatus" instead')
 @freezed
-class XFormState<T>
-    with _$XFormState<T> {
+class XFormState<T> with _$XFormState<T> {
   @Deprecated('Use "FormStatus" instead')
   const XFormState._();
 
@@ -135,20 +139,22 @@ class NetworkErrorMessageMapperBase {
   NetworkErrorMessageMapperBase();
 
   ErrorModel transform(ResultErrorType errorType) {
-    if (environment != Environment.prod) {
-      return ErrorModel(
-        message: '${errorType.name} error',
-        resultErrorType: errorType,
-      );
-    }
-
     switch (errorType) {
       case ResultErrorType.badConnection:
         return ErrorModel(
           message: noInternetErrorMessage,
           resultErrorType: errorType,
         );
-
+      case ResultErrorType.forbidden:
+        return ErrorModel(
+          message: 'Unauthorized',
+          resultErrorType: errorType,
+        );
+      case ResultErrorType.noData:
+        return ErrorModel(
+          message: 'Not found',
+          resultErrorType: errorType,
+        );
       default:
         return ErrorModel(
           message: genericErrorMessage,
@@ -161,8 +167,7 @@ class NetworkErrorMessageMapperBase {
 
   String get noInternetErrorMessage => 'No internet connection';
 
-  ErrorModel get genericErrorModel =>
-      ErrorModel(
+  ErrorModel get genericErrorModel => ErrorModel(
         message: genericErrorMessage,
         resultErrorType: ResultErrorType.other,
       );
