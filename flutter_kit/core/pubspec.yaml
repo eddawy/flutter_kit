@@ -1,6 +1,6 @@
 name: core
 description: App resources.
-version: 1.0.3
+version: 1.0.4
 publish_to: none
 
 environment:
@@ -23,8 +23,8 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   network:
     git:
-      url: https://github.com/tarek360/flutter_networking
-      ref: 0.1.12
+      url: https://github.com/eddawy/flutter_networking
+      ref: 1.0.1
 
   firebase_core: ^3.8.1
   firebase_crashlytics: ^4.2.0
