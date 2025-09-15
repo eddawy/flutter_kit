@@ -94,7 +94,7 @@ packages:
       path: "flutter_kit/core"
       relative: true
     source: path
-    version: "1.0.5"
+    version: "1.0.6"
   crypto:
     dependency: transitive
     description:

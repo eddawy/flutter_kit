@@ -12,8 +12,8 @@ DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
 final packageInfoServiceProvider = Provider((ref) => PackageInfoService());
 
 class PackageInfoService {
-  late final PackageInfo _packageInfo;
-  late final BaseDeviceInfo _deviceInfo;
+  PackageInfo? _packageInfo;
+  BaseDeviceInfo? _deviceInfo;
 
   Future<void> init() async {
     _packageInfo = await PackageInfo.fromPlatform();
@@ -30,21 +30,23 @@ class PackageInfoService {
   }
 
   int get buildNumber {
-    return int.parse(_packageInfo.buildNumber);
+    if (_packageInfo == null) return 0;
+    return int.parse(_packageInfo!.buildNumber);
   }
 
   String get version {
-    return _packageInfo.version;
+    return _packageInfo?.version ?? 'unknown';
   }
 
   String get formattedVersion {
     return '$version+$buildNumber';
   }
 
-  String get appId => _packageInfo.packageName;
+  String get appId => _packageInfo?.packageName ?? 'unknown';
 
   String get deviceModel {
-    final device = _deviceInfo;
+    if (_deviceInfo == null) return 'unknown';
+    final device = _deviceInfo!;
     String? model;
 
     if (device is WebBrowserInfo) {
@@ -61,7 +63,8 @@ class PackageInfoService {
   }
 
   String get osVersion {
-    final device = _deviceInfo;
+    if (_deviceInfo == null) return 'unknown';
+    final device = _deviceInfo!;
     String? version;
 
     if (device is WebBrowserInfo) {
