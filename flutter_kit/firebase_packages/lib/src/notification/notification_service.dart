@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:core/core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 
 import '../../firebase_packages.dart';
 
@@ -17,12 +14,12 @@ abstract class NotificationService {
 
   static final _messaging = FirebaseMessaging.instance;
   static final _localNotifications = FlutterLocalNotificationsPlugin();
-  static const _androidNotificationChannel = AndroidNotificationChannel(
-    'high_importance_channel',
-    'High Importance Notifications',
-    description: 'This channel is used for important notifications.',
-    importance: Importance.max,
-  );
+  // static const _androidNotificationChannel = AndroidNotificationChannel(
+  //   'high_importance_channel',
+  //   'High Importance Notifications',
+  //   description: 'This channel is used for important notifications.',
+  //   importance: Importance.max,
+  // );
 
   static Future<String?> getToken() async {
     try {
@@ -78,59 +75,59 @@ abstract class NotificationService {
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
   }
 
-  static Future<void> _onForegroundMessage(RemoteMessage message) async {
-    Logger.d('_onForegroundMessage, data: ${message.data}');
+  // static Future<void> _onForegroundMessage(RemoteMessage message) async {
+  //   Logger.d('_onForegroundMessage, data: ${message.data}');
 
-    final notification = message.notification;
-    final android = message.notification?.android;
-    if (notification != null && android != null) {
-      final imageUrl = android.imageUrl;
-      ByteArrayAndroidBitmap? androidBitmap;
-      if (imageUrl != null) {
-        androidBitmap = ByteArrayAndroidBitmap.fromBase64String(
-            await _base64encodedImage(imageUrl));
-      }
+  //   final notification = message.notification;
+  //   final android = message.notification?.android;
+  //   if (notification != null && android != null) {
+  //     final imageUrl = android.imageUrl;
+  //     ByteArrayAndroidBitmap? androidBitmap;
+  //     if (imageUrl != null) {
+  //       androidBitmap = ByteArrayAndroidBitmap.fromBase64String(
+  //           await _base64encodedImage(imageUrl));
+  //     }
 
-      // final sound = android.sound;
-      // final channelId = android.channelId;
+  //     // final sound = android.sound;
+  //     // final channelId = android.channelId;
 
-      // _localNotifications.show(
-      //   notification.hashCode,
-      //   notification.title,
-      //   notification.body,
-      //   NotificationDetails(
-      //     android: AndroidNotificationDetails(
-      //       channelId ?? _androidNotificationChannel.id,
-      //       channelId ?? _androidNotificationChannel.name,
-      //       icon: 'ic_notification',
-      //       styleInformation: androidBitmap != null
-      //           ? BigPictureStyleInformation(androidBitmap,
-      //               hideExpandedLargeIcon: true)
-      //           : null,
-      //       sound: sound != null && sound != 'default'
-      //           ? RawResourceAndroidNotificationSound(sound.split(".")[0])
-      //           : null,
-      //     ),
-      //   ),
-      //   payload: jsonEncode(message.data),
-      // );
-    }
+  //     // _localNotifications.show(
+  //     //   notification.hashCode,
+  //     //   notification.title,
+  //     //   notification.body,
+  //     //   NotificationDetails(
+  //     //     android: AndroidNotificationDetails(
+  //     //       channelId ?? _androidNotificationChannel.id,
+  //     //       channelId ?? _androidNotificationChannel.name,
+  //     //       icon: 'ic_notification',
+  //     //       styleInformation: androidBitmap != null
+  //     //           ? BigPictureStyleInformation(androidBitmap,
+  //     //               hideExpandedLargeIcon: true)
+  //     //           : null,
+  //     //       sound: sound != null && sound != 'default'
+  //     //           ? RawResourceAndroidNotificationSound(sound.split(".")[0])
+  //     //           : null,
+  //     //     ),
+  //     //   ),
+  //     //   payload: jsonEncode(message.data),
+  //     // );
+  //   }
 
-    if (message.notification != null) {
-      Logger.d(
-        'Message also contained a notification:\n'
-        'title: ${message.notification?.title}\n'
-        'body: ${message.notification?.body}\n'
-        'channelId: ${message.notification?.android?.channelId}\n'
-        'clickAction: ${message.notification?.android?.clickAction}\n'
-        'imageUrl: ${message.notification?.android?.imageUrl}\n'
-        'sound: ${message.notification?.android?.sound}\n'
-        'link: ${message.notification?.android?.link}\n'
-        'smallIcon: ${message.notification?.android?.smallIcon}\n'
-        'ticker: ${message.notification?.android?.ticker}\n',
-      );
-    }
-  }
+  //   if (message.notification != null) {
+  //     Logger.d(
+  //       'Message also contained a notification:\n'
+  //       'title: ${message.notification?.title}\n'
+  //       'body: ${message.notification?.body}\n'
+  //       'channelId: ${message.notification?.android?.channelId}\n'
+  //       'clickAction: ${message.notification?.android?.clickAction}\n'
+  //       'imageUrl: ${message.notification?.android?.imageUrl}\n'
+  //       'sound: ${message.notification?.android?.sound}\n'
+  //       'link: ${message.notification?.android?.link}\n'
+  //       'smallIcon: ${message.notification?.android?.smallIcon}\n'
+  //       'ticker: ${message.notification?.android?.ticker}\n',
+  //     );
+  //   }
+  // }
 
   static Future<void> listenToOnNotificationOpened(WidgetRef ref) async {
     const platformChannel = MethodChannel('flutterkit.notifications');
@@ -139,7 +136,8 @@ abstract class NotificationService {
       if (call.method == 'onNotificationOpened' &&
           arguments is Map<dynamic, dynamic>) {
         final data = arguments.map<String, dynamic>(
-            (key, value) => MapEntry(key.toString(), value));
+          (key, value) => MapEntry(key.toString(), value),
+        );
         _onMessageOpenedApp(RemoteMessage.fromMap(data), ref);
       }
     });
@@ -160,9 +158,9 @@ abstract class NotificationService {
         FlutterKitRemoteNotification.fromMap(message.data);
   }
 
-  static Future<String> _base64encodedImage(String url) async {
-    return base64Encode((await http.get(Uri.parse(url))).bodyBytes);
-  }
+  // static Future<String> _base64encodedImage(String url) async {
+  //   return base64Encode((await http.get(Uri.parse(url))).bodyBytes);
+  // }
 }
 
 @pragma('vm:entry-point')
