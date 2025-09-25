@@ -647,11 +647,11 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "1.1.0"
-      resolved-ref: "9406601a9bbf47ff28cd6ac5a6d4ac2d56c4dc37"
+      ref: "1.1.1"
+      resolved-ref: "27fedb63df5c3e03af379594582893df1e992374"
       url: "https://github.com/eddawy/flutter_networking"
     source: git
-    version: "1.1.0"
+    version: "1.1.1"
   octo_image:
     dependency: transitive
     description:

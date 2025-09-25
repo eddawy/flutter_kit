@@ -44,9 +44,10 @@ class XState<T> with _$XState<T> {
 
   void ifHasError(void Function(ErrorModel error) function) {
     final error = maybeWhen(
-        error: (error) => error,
-        dataAndError: (data, error) => error,
-        orElse: () => null);
+      error: (error) => error,
+      dataAndError: (data, error) => error,
+      orElse: () => null,
+    );
     if (error != null) function(error);
   }
 
@@ -148,6 +149,11 @@ class NetworkErrorMessageMapperBase {
       case ResultErrorType.forbidden:
         return ErrorModel(
           message: 'Unauthorized',
+          resultErrorType: errorType,
+        );
+      case ResultErrorType.featureUnavailable:
+        return ErrorModel(
+          message: 'This feature is unavailablem, please upgrade!',
           resultErrorType: errorType,
         );
       case ResultErrorType.noData:
