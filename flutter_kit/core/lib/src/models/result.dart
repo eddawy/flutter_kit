@@ -17,6 +17,7 @@ enum ResultErrorType {
   forbidden(403),
   noData(404),
   unProcessable(422),
+  featureUnavailable(423),
   server(500),
   cancel(0),
   badConnection(1),
@@ -73,6 +74,8 @@ extension NetworkErrorTypeExtension on NetworkErrorType {
         return ResultErrorType.server;
       case NetworkErrorType.unprocessable:
         return ResultErrorType.unProcessable;
+      case NetworkErrorType.featureUnavailable:
+        return ResultErrorType.featureUnavailable;
       case NetworkErrorType.badRequest:
       case NetworkErrorType.other:
         return ResultErrorType.other;
