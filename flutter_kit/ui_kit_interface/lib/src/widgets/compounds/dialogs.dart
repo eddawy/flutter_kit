@@ -434,35 +434,48 @@ Future<T?> showFrogBottomSheetOverlay<T>({
   bool enableDrag = true,
   bool isDismissible = true,
   bool dragBar = true,
+  Color? backgroundColor,
+  BoxDecoration? decoration,
+  BorderRadius? borderRadius,
+  EdgeInsets? padding,
+  Color? barrierColor,
 }) {
+  final effectiveBorderRadius = borderRadius ?? _sheetBorderRadius;
+
   return showModalBottomSheet<T>(
     context: context,
     enableDrag: enableDrag,
     isDismissible: isDismissible,
     isScrollControlled: true,
-    backgroundColor: FrogTheme.of(context).colors.neutral00,
+    backgroundColor: backgroundColor ?? FrogTheme.of(context).colors.neutral00,
+    barrierColor: barrierColor,
     builder: (context) => SafeArea(
       child: FractionallySizedBox(
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: FrogTheme.of(context).colors.neutral00,
-            borderRadius: _sheetBorderRadius,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (dragBar)
-                Container(
-                  margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
-                  width: 28,
-                  height: 3,
-                  decoration: BoxDecoration(
-                    color: FrogTheme.of(context).colors.neutral30,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+        child: Padding(
+          padding: padding ?? EdgeInsets.zero,
+          child: DecoratedBox(
+            decoration: decoration ??
+                BoxDecoration(
+                  color:
+                      backgroundColor ?? FrogTheme.of(context).colors.neutral00,
+                  borderRadius: effectiveBorderRadius,
                 ),
-              builder(context),
-            ],
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (dragBar)
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+                    width: 28,
+                    height: 3,
+                    decoration: BoxDecoration(
+                      color: FrogTheme.of(context).colors.neutral30,
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                builder(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -476,12 +489,22 @@ Future<T?> showFrogFullSlidingBottomSheet<T>({
   bool dragBar = true,
   AppBar? appBar,
   double initialChildSize = 0.95,
+  Color? backgroundColor,
+  BoxDecoration? decoration,
+  BorderRadius? borderRadius,
+  EdgeInsets? padding,
+  Color? barrierColor,
 }) {
   return showFrogSlidingBottomSheet<T>(
     context: context,
     builder: builder,
     dragBar: dragBar,
     initialChildSize: initialChildSize,
+    backgroundColor: backgroundColor,
+    decoration: decoration,
+    borderRadius: borderRadius,
+    padding: padding,
+    barrierColor: barrierColor,
   );
 }
 
@@ -495,57 +518,110 @@ Future<T?> showFrogSlidingBottomSheet<T>({
   bool dragBar = true,
   AppBar? appBar,
   Widget? footer,
+  Color? backgroundColor,
+  BoxDecoration? decoration,
+  BorderRadius? borderRadius,
+  EdgeInsets? padding,
+  Color? barrierColor,
 }) {
   final theme = Theme.of(context);
+  final effectiveBorderRadius = borderRadius ?? _sheetBorderRadius;
+
   return showModalBottomSheet<T>(
     context: context,
     isDismissible: isDismissible,
     enableDrag: false,
-    shape: const RoundedRectangleBorder(
-      borderRadius: _sheetBorderRadius,
+    shape: RoundedRectangleBorder(
+      borderRadius: effectiveBorderRadius,
     ),
     isScrollControlled: true,
-    backgroundColor: FrogTheme.of(context).colors.neutral00,
-    builder: (context) => DraggableScrollableSheet(
-      expand: false,
-      initialChildSize: initialChildSize,
-      minChildSize: minChildSize,
-      maxChildSize: maxChildSize,
-      builder: (context, scrollController) => Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (dragBar)
-            Container(
-              margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
-              width: 28,
-              height: 3,
-              decoration: BoxDecoration(
-                color: FrogTheme.of(context).colors.neutral30,
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          if (appBar != null)
-            Theme(
-              data: theme.copyWith(
-                appBarTheme: theme.appBarTheme.copyWith(
-                  centerTitle: true,
-                  toolbarHeight: 48,
-                ),
-              ),
-              child: appBar,
-            ),
-          Expanded(
-            child: ClipRRect(
-              borderRadius: _sheetBorderRadius,
-              child: builder(
+    backgroundColor: backgroundColor ?? FrogTheme.of(context).colors.neutral00,
+    barrierColor: barrierColor,
+    builder: (context) => Padding(
+      padding: padding ?? EdgeInsets.zero,
+      child: decoration != null
+          ? DecoratedBox(
+              decoration: decoration,
+              child: _buildDraggableContent(
                 context,
-                scrollController,
+                theme,
+                builder,
+                initialChildSize,
+                minChildSize,
+                maxChildSize,
+                dragBar,
+                appBar,
+                footer,
+                effectiveBorderRadius,
               ),
+            )
+          : _buildDraggableContent(
+              context,
+              theme,
+              builder,
+              initialChildSize,
+              minChildSize,
+              maxChildSize,
+              dragBar,
+              appBar,
+              footer,
+              effectiveBorderRadius,
+            ),
+    ),
+  );
+}
+
+Widget _buildDraggableContent(
+  BuildContext context,
+  ThemeData theme,
+  ScrollableWidgetBuilder builder,
+  double initialChildSize,
+  double minChildSize,
+  double maxChildSize,
+  bool dragBar,
+  AppBar? appBar,
+  Widget? footer,
+  BorderRadius borderRadius,
+) {
+  return DraggableScrollableSheet(
+    expand: false,
+    initialChildSize: initialChildSize,
+    minChildSize: minChildSize,
+    maxChildSize: maxChildSize,
+    builder: (context, scrollController) => Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (dragBar)
+          Container(
+            margin: const EdgeInsets.fromLTRB(0, 8, 0, 4),
+            width: 28,
+            height: 3,
+            decoration: BoxDecoration(
+              color: FrogTheme.of(context).colors.neutral30,
+              borderRadius: BorderRadius.circular(2),
             ),
           ),
-          if (footer != null) footer,
-        ],
-      ),
+        if (appBar != null)
+          Theme(
+            data: theme.copyWith(
+              appBarTheme: theme.appBarTheme.copyWith(
+                centerTitle: true,
+                toolbarHeight: 48,
+              ),
+            ),
+            child: appBar,
+          ),
+        Expanded(
+          child: ClipRRect(
+            borderRadius: borderRadius,
+            child: builder(
+              context,
+              scrollController,
+            ),
+          ),
+        ),
+        if (footer != null) footer,
+      ],
     ),
   );
 }
