@@ -1,6 +1,6 @@
 name: ui_kit_interface
 description: App resources.
-version: 1.0.2
+version: 1.0.3
 publish_to: none
 
 environment:

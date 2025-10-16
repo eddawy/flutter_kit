@@ -1101,7 +1101,7 @@ packages:
       path: "flutter_kit/ui_kit_interface"
       relative: true
     source: path
-    version: "1.0.2"
+    version: "1.0.3"
   url_launcher:
     dependency: transitive
     description:
