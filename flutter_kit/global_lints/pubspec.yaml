@@ -7,5 +7,5 @@ environment:
   sdk: ">=2.17.6 <3.0.0"
 
 dependencies:
-  lint: ^1.10.0
-  flutter_lints: ^5.0.0
+  lint: ^2.8.0
+  flutter_lints: ^6.0.0

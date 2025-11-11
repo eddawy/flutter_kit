@@ -11,11 +11,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  firebase_messaging: ^15.1.5
+  firebase_messaging: ^16.0.4
 
-  flutter_local_notifications: ^18.0.1
-  permission_handler: ^11.3.1
-  flutter_timezone: ^3.0.1
+  flutter_local_notifications: ^19.5.0
+  permission_handler: ^12.0.1
+  flutter_timezone: ^5.0.1
   core:
     path: ../core
 
@@ -26,6 +26,5 @@ dev_dependencies:
     path: ../global_lints
 
   build_runner: ^2.2.1
-  freezed: ^2.1.1
-  json_serializable: ^6.4.0
+  json_serializable: ^6.11.1
 
