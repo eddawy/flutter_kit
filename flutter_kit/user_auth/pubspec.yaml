@@ -31,5 +31,5 @@ dev_dependencies:
     path: ../global_lints
 
   build_runner: ^2.2.1
-  freezed: ^2.1.1
+  freezed: 
   json_serializable: ^6.3.2
