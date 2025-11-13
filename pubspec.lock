@@ -743,8 +743,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: "1.1.2"
-      resolved-ref: "0eceb5744ba82a53a70761e91bd221283cf6b3e6"
+      ref: "1.1.3"
+      resolved-ref: be65768a8bc5feaa39324221d6f4fbfe7f959914
       url: "https://github.com/eddawy/flutter_networking"
     source: git
     version: "1.1.2"
