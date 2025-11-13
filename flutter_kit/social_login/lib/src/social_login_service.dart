@@ -51,13 +51,16 @@ class SocialLoginService {
     try {
       final isSignedIn = await _googleSignIn.isSignedIn();
 
-      final googleSignInAccount = await (isSignedIn ? _googleSignIn.signInSilently() : _googleSignIn.signIn());
+      final googleSignInAccount = await (isSignedIn
+          ? _googleSignIn.signInSilently()
+          : _googleSignIn.signIn());
 
       if (googleSignInAccount == null) {
         return null; // User canceled Google Sign-In
       }
 
-      final googleSignInAuthentication = await googleSignInAccount.authentication;
+      final googleSignInAuthentication =
+          await googleSignInAccount.authentication;
 
       final accessToken = googleSignInAuthentication.accessToken;
       if (accessToken == null) {
@@ -109,6 +112,6 @@ class SocialLoginService {
       Logger.er('Invalid email in Apple ID token: $email');
     }
 
-    return email;
+    return email as String;
   }
 }

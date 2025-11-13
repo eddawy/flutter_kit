@@ -73,7 +73,7 @@ abstract class ChatUIKitColors {
 
   static final light = ChatUIKitColorScheme(
     brand: _FigmaColors.lightBrand,
-    onBrand: Color(0xffFFFFFF),
+    onBrand: const Color(0xffFFFFFF),
     primary130: _FigmaColors.lightPrimary130,
     primary100: _FigmaColors.lightPrimary100,
     primary80: _FigmaColors.lightPrimary80,
@@ -130,7 +130,7 @@ abstract class ChatUIKitColors {
 
   static final dark = ChatUIKitColorScheme(
     brand: _FigmaColors.darkBrand,
-    onBrand: Color(0xffFFFFFF),
+    onBrand: const Color(0xffFFFFFF),
     primary130: _FigmaColors.darkPrimary130,
     primary100: _FigmaColors.darkPrimary100,
     primary80: _FigmaColors.darkPrimary80,

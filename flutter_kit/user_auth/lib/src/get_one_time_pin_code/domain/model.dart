@@ -5,7 +5,7 @@ part 'model.freezed.dart';
 part 'model.g.dart';
 
 @freezed
-class GetOneTimePinCodeRequest with _$GetOneTimePinCodeRequest {
+abstract class GetOneTimePinCodeRequest with _$GetOneTimePinCodeRequest {
   const factory GetOneTimePinCodeRequest({
     required String email,
   }) = _GetOneTimePinCodeRequest;
@@ -14,7 +14,8 @@ class GetOneTimePinCodeRequest with _$GetOneTimePinCodeRequest {
 }
 
 @freezed
-class GetOneTimePinCodeResponse with _$GetOneTimePinCodeResponse, Cacheable {
+abstract class GetOneTimePinCodeResponse
+    with _$GetOneTimePinCodeResponse, Cacheable {
   const factory GetOneTimePinCodeResponse.ok({
     required String id,
     required int numberOfDigits,
@@ -31,15 +32,18 @@ class GetOneTimePinCodeResponse with _$GetOneTimePinCodeResponse, Cacheable {
 
   const GetOneTimePinCodeResponse._();
 
-  factory GetOneTimePinCodeResponse.fromJson(Map<String, dynamic> json) => _$GetOneTimePinCodeResponseFromJson(json);
+  factory GetOneTimePinCodeResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetOneTimePinCodeResponseFromJson(json);
 
   static const _key = 'GetOneTimePinCodeResponseOk';
 
-  static GetOneTimePinCodeResponse? fromCache() => Cacheable.fromCache(_key, GetOneTimePinCodeResponse.fromJson);
+  static GetOneTimePinCodeResponse? fromCache() =>
+      Cacheable.fromCache(_key, GetOneTimePinCodeResponse.fromJson);
 
   static void clearCache() => Cacheable.clear(_key);
 
-  static bool isPinCodeSent() => fromCache()?.maybeMap(ok: (_) => true, orElse: () => false) ?? false;
+  static bool isPinCodeSent() =>
+      fromCache()?.maybeMap(ok: (_) => true, orElse: () => false) ?? false;
 
   @override
   String get cacheKey => _key;

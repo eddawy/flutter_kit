@@ -4,7 +4,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'model.freezed.dart';
 
 @freezed
-class LoginRequest with _$LoginRequest {
+abstract class LoginRequest with _$LoginRequest {
   const factory LoginRequest({
     required String pinID,
     required int pinCode,
@@ -23,7 +23,8 @@ class LoginResponse with _$LoginResponse {
 
   const factory LoginResponse.expiredCode() = _LoginResponseExpiredCode;
 
-  const factory LoginResponse.otherError(ResultErrorType errorType) = _LoginResponseOtherError;
+  const factory LoginResponse.otherError(ResultErrorType errorType) =
+      _LoginResponseOtherError;
 
   const LoginResponse._();
 }

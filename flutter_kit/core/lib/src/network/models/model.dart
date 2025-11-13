@@ -3,12 +3,11 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'model.freezed.dart';
-
 part 'model.g.dart';
 
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
 
-dynamic toNull(_) {
+Object? toNull(Object? _) {
   return null;
 }
 
@@ -36,10 +35,14 @@ class MessageOut<T> {
   });
 
   MessageOut<T> listFromJson(Map<String, dynamic> json) {
-    _items = (json['Data'] as List<dynamic>).map((e) => dataFromJson.call(e as Map<String, dynamic>)).toList();
+    _items = (json['Data'] as List<dynamic>)
+        .map((e) => dataFromJson.call(e as Map<String, dynamic>))
+        .toList();
     final metadata = json['Metadata'];
     if (metadata != null) {
-      _paginationMetadata = MessageOutPaginationMetadata.fromJson(metadata as Map<String, dynamic>);
+      _paginationMetadata = MessageOutPaginationMetadata.fromJson(
+        metadata as Map<String, dynamic>,
+      );
     }
     return this;
   }
@@ -49,7 +52,9 @@ class MessageOut<T> {
     _item = dataFromJson.call(item);
     final metadata = json['Metadata'];
     if (metadata != null) {
-      _paginationMetadata = MessageOutPaginationMetadata.fromJson(metadata as Map<String, dynamic>);
+      _paginationMetadata = MessageOutPaginationMetadata.fromJson(
+        metadata as Map<String, dynamic>,
+      );
     }
     return this;
   }
@@ -81,7 +86,8 @@ class MessageOutError {
 }
 
 @freezed
-class MessageOutPaginationMetadata with _$MessageOutPaginationMetadata {
+abstract class MessageOutPaginationMetadata
+    with _$MessageOutPaginationMetadata {
   factory MessageOutPaginationMetadata({
     @JsonKey(name: 'TotalPages') @Default(1) int totalPages,
   }) = _MessageOutPaginationMetadata;
@@ -91,7 +97,7 @@ class MessageOutPaginationMetadata with _$MessageOutPaginationMetadata {
 }
 
 @freezed
-class PaginationAndFilter with _$PaginationAndFilter {
+abstract class PaginationAndFilter with _$PaginationAndFilter {
   factory PaginationAndFilter({
     required int limit,
     required int page,

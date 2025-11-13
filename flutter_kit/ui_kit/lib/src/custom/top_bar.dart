@@ -1,6 +1,5 @@
-import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter/material.dart';
-import 'package:ui_kit_interface/ui_kit_interface.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   const TopBar({
@@ -48,7 +47,9 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 )
           : leading,
-      title: title != null ? FrogText.headlineSmall(title!, color: colors.neutral80) : null,
+      title: title != null
+          ? FrogText.headlineSmall(title!, color: colors.neutral80)
+          : null,
       actions: [
         if (trailing != null) trailing!,
       ],

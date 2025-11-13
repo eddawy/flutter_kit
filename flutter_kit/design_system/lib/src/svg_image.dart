@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'svg_image_file/_svg_Image_file_io.dart' if (dart.library.html) 'svg_image_file/_svg_image_file_none.dart';
+import 'svg_image_file/_svg_image_file_io.dart'
+    if (dart.library.html) 'svg_image_file/_svg_image_file_none.dart';
 
 class SvgImageData {
   final String name;
@@ -177,7 +178,7 @@ class _SvgImageNetworkState extends State<_SvgImageNetwork> {
     );
   }
 
-  Future<File> _getLocalFile(String url) async {
+  Future<File> _getLocalFile(String url) {
     return DefaultCacheManager().getSingleFile(url, headers: widget.headers);
   }
 }

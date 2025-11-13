@@ -24,7 +24,7 @@ dependencies:
   network:
     git:
       url: https://github.com/eddawy/flutter_networking
-      ref: 1.1.1
+      ref: 1.1.2
 
   firebase_core: ^4.2.1
   firebase_crashlytics: ^5.0.4
@@ -38,6 +38,6 @@ dev_dependencies:
     path: ../global_lints
 
   build_runner: ^2.7.1
-  freezed: 
+  freezed: 3.2.3
   json_serializable: ^6.11.1
 

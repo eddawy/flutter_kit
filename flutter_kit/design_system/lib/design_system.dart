@@ -1,5 +1,3 @@
-library design_system;
-
 export 'src/animated_views.dart';
 export 'src/app_shadows.dart';
 export 'src/default_frog_theme.dart';

@@ -1,56 +1,122 @@
 import 'package:core/core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../domain/get_one_time_pin_code.dart';
 import '../domain/model.dart';
 
-final userEmailProvider = StateProvider<String>((ref) {
-  return '';
-});
-
-final errorMessageProvider = StateProvider<String?>((ref) {
-  return null;
-});
+// part 'one_time_pin_code_viewmodel.g.dart';
 
 typedef GetString = String Function();
 
-class GetOneTimePinCodeViewmodel extends StateNotifier<XFormState<GetOneTimePinCodeResponse>> {
-  final Ref _ref;
-  final GetOneTimePinCode _getOneTimePinCodesInteractor;
-  final NetworkErrorMessageMapperBase _networkErrorMessageMapper;
-  final GetString _emailInputError;
+enum OneTimePinCodeFieldType { email }
 
-  GetOneTimePinCodeViewmodel(
-    this._ref,
-    this._getOneTimePinCodesInteractor,
-    this._networkErrorMessageMapper,
-    this._emailInputError,
-  ) : super(const XFormState.draft());
+// State model for the form
+class OneTimePinCodeFormState {
+  final String email;
+  final String? errorMessage;
+  final FormStatus<GetOneTimePinCodeResponse?, OneTimePinCodeFieldType>
+      formStatus;
+
+  const OneTimePinCodeFormState({
+    this.email = '',
+    this.errorMessage,
+    required this.formStatus,
+  });
+
+  OneTimePinCodeFormState copyWith({
+    String? email,
+    String? Function()? errorMessage,
+    FormStatus<GetOneTimePinCodeResponse?, OneTimePinCodeFieldType>? formStatus,
+  }) {
+    return OneTimePinCodeFormState(
+      email: email ?? this.email,
+      errorMessage: errorMessage != null ? errorMessage() : this.errorMessage,
+      formStatus: formStatus ?? this.formStatus,
+    );
+  }
+}
+
+@riverpod
+class GetOneTimePinCodeViewmodel {
+  // extends _$GetOneTimePinCodeViewmodel {
+  late GetOneTimePinCode _getOneTimePinCodesInteractor;
+  late NetworkErrorMessageMapperBase _networkErrorMessageMapper;
+  late GetString _emailInputError;
+
+  // Temporary placeholder
+  late OneTimePinCodeFormState state;
+  late dynamic ref;
+
+  // @override
+  OneTimePinCodeFormState build() {
+    // Initialize dependencies - these should be injected via providers
+    // For now, we'll use ref.watch to get them
+    // You'll need to create providers for these dependencies
+    return OneTimePinCodeFormState(
+      formStatus: const FormStatus(
+        data: null,
+        status: FormStatusType.draft,
+      ),
+    );
+  }
+
+  // Initialize dependencies (call this from the UI or use dependency injection)
+  void initialize({
+    required GetOneTimePinCode getOneTimePinCodesInteractor,
+    required NetworkErrorMessageMapperBase networkErrorMessageMapper,
+    required GetString emailInputError,
+  }) {
+    _getOneTimePinCodesInteractor = getOneTimePinCodesInteractor;
+    _networkErrorMessageMapper = networkErrorMessageMapper;
+    _emailInputError = emailInputError;
+  }
 
   void setEmail(String value) {
-    _ref.read(errorMessageProvider.notifier).state = null;
-    _ref.read(userEmailProvider.notifier).state = value;
+    state = state.copyWith(
+      email: value,
+      errorMessage: () => null,
+    );
   }
 
   bool get isSubmitButtonEnabled {
-    return _ref.read(userEmailProvider).isNotEmpty;
+    return state.email.isNotEmpty;
   }
 
   Future<void> getOneTimePinCode() async {
-    final email = _ref.read(userEmailProvider);
+    final email = state.email;
     if (!_isValidEmail(email)) {
-      _ref.read(errorMessageProvider.notifier).state = _emailInputError();
+      state = state.copyWith(
+        errorMessage: () => _emailInputError(),
+      );
       return;
     }
 
-    state = const XFormState.loading();
+    state = state.copyWith(
+      formStatus: state.formStatus.copyWith(status: FormStatusType.loading),
+    );
 
     final getOneTimePinCodeRequest = GetOneTimePinCodeRequest(email: email);
 
-    final result = await _getOneTimePinCodesInteractor(getOneTimePinCodeRequest);
+    final result =
+        await _getOneTimePinCodesInteractor(getOneTimePinCodeRequest);
+
     result.when(
-      success: (data) => state = XFormState.submitted(data),
-      failure: (error) => state = XFormState.error(_networkErrorMessageMapper.transform(error)),
+      success: (data) {
+        state = state.copyWith(
+          formStatus: state.formStatus.copyWith(
+            data: data,
+            status: FormStatusType.submitted,
+          ),
+        );
+      },
+      failure: (error) {
+        state = state.copyWith(
+          formStatus: state.formStatus.copyWith(
+            status: FormStatusType.draft,
+            error: _networkErrorMessageMapper.transform(error),
+          ),
+        );
+      },
     );
   }
 

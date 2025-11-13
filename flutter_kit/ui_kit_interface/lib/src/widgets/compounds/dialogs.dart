@@ -133,8 +133,8 @@ Future<T?> _showDialog<T>({
   return showDialog<T>(
     context: context,
     barrierDismissible: isDismissible,
-    builder: (context) => WillPopScope(
-      onWillPop: () => Future.value(isDismissible),
+    builder: (context) => PopScope(
+      canPop: isDismissible,
       child: builder(context),
     ),
   );

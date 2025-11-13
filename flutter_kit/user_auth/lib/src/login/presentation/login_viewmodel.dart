@@ -1,31 +1,8 @@
 import 'package:core/core.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:user_auth/user_auth.dart';
 
-// final _loginProvider = Provider(
-//   (ref) => Login(
-//     ref.watch(loginRepositoryProvider),
-//     ref.watch(refreshTokenRepositoryProvider),
-//     ref.watch(_getCachedOneTimePinCodeProvider),
-//     ref.watch(_clearOneTimePinCodeCacheProvider),
-//     ref.watch(getUserOnboardingInfoProvider),
-//     ref.watch(userProfileRepositoryProvider),
-//     ref.watch(fetchUserDataProvider),
-//   ),
-// );
-//
-// final _getCachedOneTimePinCodeProvider = Provider(
-//   (ref) => GetCachedOneTimePinCodeInfo(
-//     ref.watch(getOneTimePinCodeRepositoryProvider),
-//   ),
-// );
-//
-// final _clearOneTimePinCodeCacheProvider = Provider(
-//   (ref) => ClearOneTimePinCodeCache(
-//     ref.watch(getOneTimePinCodeRepositoryProvider),
-//   ),
-// );
-//
+part 'login_viewmodel.g.dart';
 
 enum LoginSubmissionState {
   success,
@@ -33,82 +10,146 @@ enum LoginSubmissionState {
   expiredCode,
 }
 
-class LoginViewmodel extends StateNotifier<XFormState<LoginSubmissionState>> {
-  final pinCodeProvider = StateProvider<List<String>>((ref) {
-    // final pinCodeResponse = ref.watch(_getCachedOneTimePinCodeProvider)();
-    // if (pinCodeResponse != null) {
-    //   return List.generate(pinCodeResponse.numberOfDigits, (index) => '');
-      return List.generate(4, (index) => '');
-    // } else {
-    // return [];
-    // }
+// State model for the login form
+class LoginFormState {
+  final List<String> pinCode;
+  final String? errorMessage;
+  final bool isPinCodeExpired;
+  final FormStatus<LoginSubmissionState?, void> formStatus;
+  final String userEmail;
+
+  const LoginFormState({
+    required this.pinCode,
+    this.errorMessage,
+    this.isPinCodeExpired = false,
+    required this.formStatus,
+    required this.userEmail,
   });
 
-  final errorMessageProvider = StateProvider.autoDispose<String?>((ref) {
-    return null;
-  });
+  LoginFormState copyWith({
+    List<String>? pinCode,
+    String? Function()? errorMessage,
+    bool? isPinCodeExpired,
+    FormStatus<LoginSubmissionState?, void>? formStatus,
+    String? userEmail,
+  }) {
+    return LoginFormState(
+      pinCode: pinCode ?? this.pinCode,
+      errorMessage: errorMessage != null ? errorMessage() : this.errorMessage,
+      isPinCodeExpired: isPinCodeExpired ?? this.isPinCodeExpired,
+      formStatus: formStatus ?? this.formStatus,
+      userEmail: userEmail ?? this.userEmail,
+    );
+  }
+}
 
-  final isPinCodeExpiredProvider = StateProvider.autoDispose<bool>((ref) {
-    return false;
-  });
+@riverpod
+class LoginViewmodel extends _$LoginViewmodel {
+  late Login _login;
+  late NetworkErrorMessageMapperBase _networkErrorMessageMapper;
+  late ClearOneTimePinCodeCache _clearOneTimePinCodeCache;
 
-  final Ref _ref;
-  final Login _login;
-  final NetworkErrorMessageMapperBase _networkErrorMessageMapper;
-  final ClearOneTimePinCodeCache _clearOneTimePinCodeCache;
-  late final String userEmail;
+  @override
+  LoginFormState build() {
+    return LoginFormState(
+      pinCode: const [],
+      formStatus: const FormStatus(data: null, status: FormStatusType.draft),
+      userEmail: '',
+    );
+  }
 
-  LoginViewmodel(
-    this._ref,
-    this._login,
-    GetCachedOneTimePinCodeInfo getCachedOneTimePinCode,
-    this._clearOneTimePinCodeCache,
-    this._networkErrorMessageMapper,
-  ) : super(const XFormState.draft()) {
+  // Initialize dependencies (call this from the UI)
+  void initialize({
+    required Login login,
+    required GetCachedOneTimePinCodeInfo getCachedOneTimePinCode,
+    required ClearOneTimePinCodeCache clearOneTimePinCodeCache,
+    required NetworkErrorMessageMapperBase networkErrorMessageMapper,
+  }) {
+    _login = login;
+    _clearOneTimePinCodeCache = clearOneTimePinCodeCache;
+    _networkErrorMessageMapper = networkErrorMessageMapper;
+
     final pinCodeResponse = getCachedOneTimePinCode();
     if (pinCodeResponse != null) {
-      userEmail = pinCodeResponse.userEmail;
+      state = state.copyWith(
+        userEmail: pinCodeResponse.userEmail,
+        pinCode: List.generate(pinCodeResponse.numberOfDigits, (index) => ''),
+      );
     } else {
-      userEmail = '';
+      state = state.copyWith(
+        userEmail: '',
+        pinCode: List.generate(4, (index) => ''),
+      );
       _showCodeExpiredPopup();
     }
   }
 
   Future<void> _showCodeExpiredPopup() async {
     await Future.delayed(const Duration(seconds: 1));
-    _ref.read(isPinCodeExpiredProvider.notifier).state = true;
+    if (!ref.mounted) return;
+    state = state.copyWith(isPinCodeExpired: true);
   }
 
   Future<void> _verifyPinCode() async {
-    state = const XFormState.loading();
+    state = state.copyWith(
+      formStatus: state.formStatus.copyWith(status: FormStatusType.loading),
+    );
 
-    final pinCode = int.parse(_ref.read(pinCodeProvider).join());
+    final pinCode = int.parse(state.pinCode.join());
 
     final result = await _login(pinCode);
 
-    state = result.when(
-      success: (token) => const XFormState.submitted(LoginSubmissionState.success),
-      invalidCode: () => const XFormState.submitted(LoginSubmissionState.invalidCode),
-      expiredCode: () => const XFormState.submitted(LoginSubmissionState.expiredCode),
-      otherError: (error) => XFormState.error(_networkErrorMessageMapper.transform(error)),
+    if (!ref.mounted) return;
+
+    result.when(
+      success: (token) {
+        state = state.copyWith(
+          formStatus: state.formStatus.copyWith(
+            data: LoginSubmissionState.success,
+            status: FormStatusType.submitted,
+          ),
+        );
+      },
+      invalidCode: () {
+        state = state.copyWith(
+          formStatus: state.formStatus.copyWith(
+            data: LoginSubmissionState.invalidCode,
+            status: FormStatusType.submitted,
+          ),
+        );
+      },
+      expiredCode: () {
+        state = state.copyWith(
+          formStatus: state.formStatus.copyWith(
+            data: LoginSubmissionState.expiredCode,
+            status: FormStatusType.submitted,
+          ),
+        );
+      },
+      otherError: (error) {
+        state = state.copyWith(
+          formStatus: state.formStatus.copyWith(
+            status: FormStatusType.draft,
+            error: _networkErrorMessageMapper.transform(error),
+          ),
+        );
+      },
     );
   }
 
   void onBackspaceTap() {
-    final values = _ref.read(pinCodeProvider);
+    final values = List<String>.from(state.pinCode);
     for (var i = values.length - 1; i >= 0; --i) {
       if (values[i].isNotEmpty) {
         values[i] = '';
         break;
       }
     }
-
-    _ref.read(pinCodeProvider.notifier).state = List.of(values);
+    state = state.copyWith(pinCode: values);
   }
 
   void onNumKeyTap(String key) {
-    final values = _ref.read(pinCodeProvider);
-
+    final values = List<String>.from(state.pinCode);
     final wasLastDigitEmpty = values.last.isEmpty;
 
     for (var i = 0; i < values.length; ++i) {
@@ -118,7 +159,7 @@ class LoginViewmodel extends StateNotifier<XFormState<LoginSubmissionState>> {
       }
     }
 
-    _ref.read(pinCodeProvider.notifier).state = List.of(values);
+    state = state.copyWith(pinCode: values);
 
     final isLastDigitAdded = wasLastDigitEmpty && values.last.isNotEmpty;
 

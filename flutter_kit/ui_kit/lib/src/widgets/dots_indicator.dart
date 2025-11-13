@@ -16,7 +16,7 @@ class ChatUIDotsIndicator extends StatelessWidget {
   Widget build(BuildContext context) => dotsCount > 0
       ? dots_indicator.DotsIndicator(
           dotsCount: dotsCount,
-          position: position,
+          position: position.toDouble(),
           decorator: dots_indicator.DotsDecorator(
             size: const Size.square(6),
             activeSize: const Size.square(6),

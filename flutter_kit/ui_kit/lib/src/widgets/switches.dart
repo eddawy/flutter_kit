@@ -19,8 +19,8 @@ class ChatUISwitch extends StatelessWidget {
       child: Transform.scale(
         scale: 0.8,
         child: CupertinoSwitch(
-          activeColor: colors.brand,
-          trackColor: colors.neutral20,
+          activeTrackColor: colors.brand,
+          inactiveTrackColor: colors.neutral20,
           thumbColor: colors.neutral00,
           value: value,
           onChanged: onChanged,

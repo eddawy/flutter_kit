@@ -24,10 +24,8 @@ class SvgIcon extends StatelessWidget {
       switch (FrogTheme.of(context).brightness) {
         case Brightness.dark:
           fileName = '${icon.name}_dark';
-          break;
         case Brightness.light:
           fileName = '${icon.name}_light';
-          break;
       }
     } else {
       fileName = icon.name;
@@ -37,7 +35,8 @@ class SvgIcon extends StatelessWidget {
       'assets/svg/$fileName.svg',
       package: FrogTheme.of(context).resourcesPackage,
       semanticsLabel: semanticsLabel,
-      color: color,
+      colorFilter:
+          color != null ? ColorFilter.mode(color!, BlendMode.srcIn) : null,
       width: size,
       height: size,
     );
