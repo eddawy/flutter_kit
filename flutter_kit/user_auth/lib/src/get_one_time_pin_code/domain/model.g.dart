@@ -6,17 +6,17 @@ part of 'model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$GetOneTimePinCodeResponseOk _$$GetOneTimePinCodeResponseOkFromJson(
+GetOneTimePinCodeResponseOk _$GetOneTimePinCodeResponseOkFromJson(
         Map<String, dynamic> json) =>
-    _$GetOneTimePinCodeResponseOk(
+    GetOneTimePinCodeResponseOk(
       id: json['id'] as String,
-      numberOfDigits: json['numberOfDigits'] as int,
+      numberOfDigits: (json['numberOfDigits'] as num).toInt(),
       userEmail: json['userEmail'] as String,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$GetOneTimePinCodeResponseOkToJson(
-        _$GetOneTimePinCodeResponseOk instance) =>
+Map<String, dynamic> _$GetOneTimePinCodeResponseOkToJson(
+        GetOneTimePinCodeResponseOk instance) =>
     <String, dynamic>{
       'id': instance.id,
       'numberOfDigits': instance.numberOfDigits,
@@ -24,29 +24,29 @@ Map<String, dynamic> _$$GetOneTimePinCodeResponseOkToJson(
       'runtimeType': instance.$type,
     };
 
-_$GetOneTimePinCodeResponseBlocked _$$GetOneTimePinCodeResponseBlockedFromJson(
+GetOneTimePinCodeResponseBlocked _$GetOneTimePinCodeResponseBlockedFromJson(
         Map<String, dynamic> json) =>
-    _$GetOneTimePinCodeResponseBlocked(
+    GetOneTimePinCodeResponseBlocked(
       userEmail: json['userEmail'] as String,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$GetOneTimePinCodeResponseBlockedToJson(
-        _$GetOneTimePinCodeResponseBlocked instance) =>
+Map<String, dynamic> _$GetOneTimePinCodeResponseBlockedToJson(
+        GetOneTimePinCodeResponseBlocked instance) =>
     <String, dynamic>{
       'userEmail': instance.userEmail,
       'runtimeType': instance.$type,
     };
 
-_$GetOneTimePinCodeResponseNoUser _$$GetOneTimePinCodeResponseNoUserFromJson(
+GetOneTimePinCodeResponseNoUser _$GetOneTimePinCodeResponseNoUserFromJson(
         Map<String, dynamic> json) =>
-    _$GetOneTimePinCodeResponseNoUser(
+    GetOneTimePinCodeResponseNoUser(
       userEmail: json['userEmail'] as String,
       $type: json['runtimeType'] as String?,
     );
 
-Map<String, dynamic> _$$GetOneTimePinCodeResponseNoUserToJson(
-        _$GetOneTimePinCodeResponseNoUser instance) =>
+Map<String, dynamic> _$GetOneTimePinCodeResponseNoUserToJson(
+        GetOneTimePinCodeResponseNoUser instance) =>
     <String, dynamic>{
       'userEmail': instance.userEmail,
       'runtimeType': instance.$type,

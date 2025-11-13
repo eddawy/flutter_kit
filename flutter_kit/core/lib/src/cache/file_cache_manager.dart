@@ -7,7 +7,7 @@ class FileCacheManager {
 
   final Map<String, String> Function() getHeaders;
 
-  Future<File> getSingleFile(String url) async {
+  Future<File> getSingleFile(String url) {
     return DefaultCacheManager().getSingleFile(url, headers: getHeaders());
   }
 }

@@ -1,5 +1,3 @@
-library core;
-
 import 'package:core/src/cache/app_shared_preferences.dart';
 import 'package:core/src/package_info/package_info_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

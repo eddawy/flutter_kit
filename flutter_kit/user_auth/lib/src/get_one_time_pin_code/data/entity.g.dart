@@ -22,8 +22,8 @@ GetOneTimePinCodeResponseEntity _$GetOneTimePinCodeResponseEntityFromJson(
         Map<String, dynamic> json) =>
     GetOneTimePinCodeResponseEntity(
       id: json['ID'] as String?,
-      numberOfDigits: json['NumOfDigits'] as int?,
-      expiryDuration: json['ExpiryDuration'] as int?,
+      numberOfDigits: (json['NumOfDigits'] as num?)?.toInt(),
+      expiryDuration: (json['ExpiryDuration'] as num?)?.toInt(),
       error: $enumDecodeNullable(
           _$GetOneTimePinCodeResponseErrorEntityEnumMap, json['error']),
     );

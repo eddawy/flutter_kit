@@ -1,1 +1,5 @@
 include: package:global_lints/global_lints.yaml
+
+linter:
+  rules:
+    unreachable_from_main: false

@@ -1,6 +1,6 @@
-import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 void showErrorSnackBar(
   BuildContext context, {
@@ -66,7 +66,7 @@ class _CustomSnackBar extends StatelessWidget {
               Icons.error_rounded,
               color: Color(0x15000000),
               size: 40,
-            )
+            ),
           ],
         ),
       ),

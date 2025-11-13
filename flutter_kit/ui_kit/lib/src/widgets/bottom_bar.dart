@@ -15,20 +15,28 @@ class BottomBar extends StatelessWidget {
       decoration: ShapeDecoration(
         color: colors.neutral00,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
         ),
         shadows: [
           BoxShadow(
             color: colors.neutral10,
             blurRadius: 0,
-            offset: const Offset(0, -4),
-          )
+            offset: const Offset(
+              0,
+              -4,
+            ),
+          ),
         ],
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0.18),
         child: Row(
-          mainAxisAlignment: isMobile(context) ? MainAxisAlignment.spaceAround : MainAxisAlignment.start,
+          mainAxisAlignment: isMobile(context)
+              ? MainAxisAlignment.spaceAround
+              : MainAxisAlignment.start,
           children: items,
         ),
       ),
@@ -84,16 +92,16 @@ class BottomBarItem extends StatelessWidget {
                 ],
               ),
             ),
-          if (label != null) ...[
-            label
-          ],
+          if (label != null) ...[label],
           if (isSelected)
             Container(
               width: 32,
               height: 3,
               decoration: BoxDecoration(
                 color: colors.neutral50,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(
+                  16,
+                ),
               ),
             ),
         ],

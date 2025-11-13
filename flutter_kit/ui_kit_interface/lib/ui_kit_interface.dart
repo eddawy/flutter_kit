@@ -1,5 +1,3 @@
-library ui_kit_interface;
-
 export 'package:design_system/design_system.dart';
 
 export 'src/helpers.dart';

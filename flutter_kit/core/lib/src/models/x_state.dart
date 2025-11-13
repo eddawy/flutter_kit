@@ -127,7 +127,7 @@ class RemoteObjectState<T> with _$RemoteObjectState<T> {
 }
 
 @freezed
-class ErrorModel with _$ErrorModel {
+abstract class ErrorModel with _$ErrorModel {
   const factory ErrorModel({
     required String message,
     required ResultErrorType resultErrorType,
@@ -206,7 +206,7 @@ enum FormStatusType {
 }
 
 @freezed
-class FormStatus<T, F> with _$FormStatus<T, F> {
+abstract class FormStatus<T, F> with _$FormStatus<T, F> {
   const factory FormStatus({
     required T data,
     required FormStatusType status,

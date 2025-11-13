@@ -6,14 +6,14 @@ part of 'model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MessageOutPaginationMetadataImpl _$$MessageOutPaginationMetadataImplFromJson(
+_MessageOutPaginationMetadata _$MessageOutPaginationMetadataFromJson(
         Map<String, dynamic> json) =>
-    _$MessageOutPaginationMetadataImpl(
+    _MessageOutPaginationMetadata(
       totalPages: (json['TotalPages'] as num?)?.toInt() ?? 1,
     );
 
-Map<String, dynamic> _$$MessageOutPaginationMetadataImplToJson(
-        _$MessageOutPaginationMetadataImpl instance) =>
+Map<String, dynamic> _$MessageOutPaginationMetadataToJson(
+        _MessageOutPaginationMetadata instance) =>
     <String, dynamic>{
       'TotalPages': instance.totalPages,
     };

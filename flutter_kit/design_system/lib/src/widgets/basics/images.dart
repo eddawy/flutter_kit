@@ -87,7 +87,8 @@ class ImageNetwork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final placeholder = placeHolder ?? ImagePlaceholder(width: width, height: height);
+    final placeholder =
+        placeHolder ?? ImagePlaceholder(width: width, height: height);
 
     final imageUrl = this.imageUrl;
     Widget image;
@@ -227,7 +228,7 @@ class ImageNetworkBlur extends StatelessWidget {
           filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
           child: Container(
             alignment: Alignment.center,
-            color: Colors.white.withOpacity(0.0),
+            color: Colors.white.withValues(alpha: 0.0),
           ),
         ),
       ),

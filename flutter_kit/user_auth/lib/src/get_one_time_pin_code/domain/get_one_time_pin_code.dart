@@ -11,12 +11,14 @@ class GetOneTimePinCode {
   );
 
   Future<Result<GetOneTimePinCodeResponse, ResultErrorType>> call(
-      GetOneTimePinCodeRequest requestInfo) async {
+    GetOneTimePinCodeRequest requestInfo,
+  ) {
     return _getOneTimePinCode(requestInfo);
   }
 
   Future<Result<GetOneTimePinCodeResponse, ResultErrorType>> _getOneTimePinCode(
-      GetOneTimePinCodeRequest user) async {
+    GetOneTimePinCodeRequest user,
+  ) async {
     final result = await _repository.getOneTimePinCode(user);
     return result.when(
       success: (data) {

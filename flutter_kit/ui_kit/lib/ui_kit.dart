@@ -1,5 +1,3 @@
-library design_system;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -88,7 +86,7 @@ class ChatUIKit extends UIKitComponents {
           centerTitle: true,
           shadowColor: colors.neutral00,
           surfaceTintColor: colors.neutral00,
-          color: colors.neutral00,
+          backgroundColor: colors.neutral00,
           systemOverlayStyle: _getSystemUiOverlayStyle(brightness, colors),
           iconTheme: IconThemeData(color: colors.neutral100),
         ),

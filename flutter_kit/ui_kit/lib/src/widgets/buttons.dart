@@ -1,6 +1,6 @@
-import 'package:ui_kit/ui_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ui_kit/ui_kit.dart';
 
 enum ButtonType {
   primary,
@@ -86,33 +86,30 @@ class ChatUIButton extends StatelessWidget {
         iconSize = 24;
         textStyle = FrogTextStyle.titleMedium;
         fontWeight = FontWeight.w600;
-        break;
       case ButtonSize.medium:
         height = 40;
         cornerRadius = 12;
         iconSize = 20;
         textStyle = FrogTextStyle.bodyLarge;
         fontWeight = FontWeight.w600;
-        break;
       case ButtonSize.small:
         height = 28;
         cornerRadius = 8;
         iconSize = 16;
         textStyle = FrogTextStyle.bodySmall;
         fontWeight = FontWeight.w600;
-        break;
     }
 
     switch (_buttonType) {
       case ButtonType.primary:
-        foregroundColor = labelColor ?? (onPressed != null ? colors.neutral00 : colors.neutral50);
-        break;
+        foregroundColor = labelColor ??
+            (onPressed != null ? colors.neutral00 : colors.neutral50);
       case ButtonType.outline:
-        foregroundColor = labelColor ?? (onPressed != null ? colors.neutral100 : colors.neutral60);
-        break;
+        foregroundColor = labelColor ??
+            (onPressed != null ? colors.neutral100 : colors.neutral60);
       case ButtonType.text:
-        foregroundColor = labelColor ?? (onPressed != null ? colors.brand : colors.neutral30);
-        break;
+        foregroundColor =
+            labelColor ?? (onPressed != null ? colors.brand : colors.neutral30);
     }
 
     final text = FrogText(
@@ -260,7 +257,8 @@ class ChatUIButton extends StatelessWidget {
                   height: height,
                   cornerRadius: cornerRadius,
                   isOutline: false,
-                  color: labelColor?.withOpacity(0.05) ?? colors.brand.withOpacity(0.05),
+                  color: labelColor?.withValues(alpha: 0.05) ??
+                      colors.brand.withValues(alpha: 0.05),
                   child: content,
                 );
               case PressingState.disabled:
@@ -520,7 +518,9 @@ class _PressableBackground extends StatelessWidget {
           decoration: ShapeDecoration(
             color: color,
             shape: SmoothRectangleBorder(
-              side: isOutline == true ? BorderSide(color: color, width: 2.0) : BorderSide.none,
+              side: isOutline == true
+                  ? BorderSide(color: color, width: 2.0)
+                  : BorderSide.none,
               borderRadius: SmoothBorderRadius(
                 cornerRadius: cornerRadius,
                 cornerSmoothing: 0.6,
